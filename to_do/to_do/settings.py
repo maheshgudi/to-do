@@ -121,6 +121,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTHENTICATION_BACKENDS = (
-  'to_do.backend.LoginWithEmailBackend',
   'django.contrib.auth.backends.ModelBackend',
+  'to_do.backend.LoginWithEmailBackend',
 )
