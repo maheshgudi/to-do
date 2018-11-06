@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Login
+	</title>
+</head>
+<body>
+{% if form %}
+<form action="" method="POST">
+{% csrf_token %}
+{{form.as_p}}
+<button type="submit">Login</button><br/>
+</form>
+{% endif %}
+<br>
+Sign Up <a href = "{% url 'signup'%}">
+</body>
+</html>

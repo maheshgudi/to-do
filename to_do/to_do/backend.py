@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
-class AuthenticationFailed(Exception):
+class AuthenticationFailedException(Exception):
     pass
 
 class LoginWithEmailBackend(object):
@@ -18,7 +18,7 @@ class LoginWithEmailBackend(object):
         if user.check_password(password):
             return user
         else:
-            raise AuthenticationFailed("The password did not match")
+            raise AuthenticationFailedException("The password did not match")
 
     def get_user(self, user_id):
         try:

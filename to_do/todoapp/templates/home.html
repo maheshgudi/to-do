@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Home
+	</title>
+</head>
+<body>
+Welcome {{user}}
+{% if form %}
+<form action="" method="POST">
+{% csrf_token %}
+{{form.as_p}}
+{% endif %}
+</body>
+</html>
