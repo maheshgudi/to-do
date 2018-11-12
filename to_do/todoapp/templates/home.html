@@ -12,5 +12,13 @@ Welcome {{user}}
 {% csrf_token %}
 {{form.as_p}}
 {% endif %}
+
+{% if my_tasks %}
+<form action="" method="POST">
+{% csrf_token %}
+{{form.as_p}}
+{% endif %}
+<br>
+<a href="{% url 'show_group_tasks'%}">Show Active Group Tasks</a>
 </body>
 </html>

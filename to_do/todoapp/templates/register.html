@@ -6,19 +6,14 @@
 	</title>
 </head>
 <body>
-	{% if messages %}
-	{% for message in messages %}
-	<p>{{message}}</p>
-	{% endfor %}
-	{% endif %}
 {% if form %}
 <form action="" method="POST">
 {% csrf_token %}
 {{form.as_p}}
-<button type="submit">Login</button><br/>
+<button type="submit">Register</button><br/>
 </form>
 {% endif %}
 <br>
-<a href = "{% url 'signup'%}">Sign Up</a>
+<a href = "{% url 'login'%}">Login</a>
 </body>
 </html>

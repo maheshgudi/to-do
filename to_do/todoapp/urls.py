@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from todoapp.views import (user_login,home)
+from todoapp.views import (user_login, home, user_register, show_group_tasks)
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^login/', user_login, name="login"),
     url(r'^home/', home, name="home"),
-    url(r'^signup/', home, name="signup"),
+    url(r'^show_group_tasks/', show_group_tasks, name="show_group_tasks"),
+    url(r'^signup/', user_register, name="signup"),
+    url(r'^logout/', auth_views.logout,{"next_page": '/login'}, name='logout'),
 
 ]

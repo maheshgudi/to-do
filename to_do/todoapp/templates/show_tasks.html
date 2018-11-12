@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Show Task
+	</title>
+</head>
+<body>
+{% if form %}
+<form action="" method="POST">
+{% csrf_token %}
+{{form.as_p}}
+<button type="submit">Submit</button><br/>
+{% endif %}
+<br><a href="{% url 'home'%}">Go home</a>
+</body>
+</html>
