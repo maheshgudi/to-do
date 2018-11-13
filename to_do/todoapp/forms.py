@@ -60,16 +60,20 @@ class TaskForm(forms.ModelForm):
     """
     Form for tasks.
     """
-    def __init__(self, user, **kwargs):
-        super(TaskForm, self).__init__(**kwargs)
-        if user:
-            group = user.groups.all().order_by("id").last()
-            print("group", group)
-            group_users = group.user_set.all()
-            self.fields["assignee"] = forms.ModelChoiceField(
-                                            queryset=group_users
-                                            )
-
+    def __init__(self, *args, **kwargs):
+        super(TaskForm, self).__init__(*args, **kwargs)
+        print(*args)
     class Meta:
         model = Task
-        exclude=['group', 'completed']
+        exclude=['completed']
+        
+        # if user:
+        #     try:
+        #         group = user.groups.all().order_by("id").last()
+        #     except AttributeError:
+        #         print(dict(user))
+        #     group_users = group.user_set.all()
+        #     print("group_user", group_users)
+        #     self.fields["assignee"] = forms.ModelChoiceField(
+        #                                     queryset=group_users
+        #                                     )

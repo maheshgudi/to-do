@@ -9,13 +9,14 @@ from django.contrib import messages
 from todoapp.models import Task
 from todoapp.forms import (UserLoginForm, UserRegisterForm, TaskForm)
 
-
+# TODO: Put all utils function outside views
 def get_email_domain(email):
     """A very simple and flawed function to get domain names from a user 
        email"""
     return email.split('@')[1]
 
-
+# TODO: Use default django login view
+# Put complexity in backend
 def user_login(request):
     """
     Index page of Website. Also serves as a login page.
@@ -44,7 +45,7 @@ def user_login(request):
             context["form"] = UserLoginForm()
     return render(request, 'login.html', context)
 
-
+#TODO: Do this during registration
 @login_required(login_url='/login')
 def home(request):
     """Logged in user home page. Can see tasks assigned to them. Can mark
@@ -57,8 +58,8 @@ def home(request):
     group_content_type = ContentType.objects.get_for_model(Group)
     if user_email_domain:
         user_group, created = Group.objects.get_or_create(
-                                            name=user_email_domain
-                                            )
+            name=user_email_domain
+        )
         user_group.user_set.add(user)
         user_group.save()
         if created:
@@ -66,7 +67,7 @@ def home(request):
                 codename='is_admin',
                 content_type=group_content_type,
                 name="Is Group Admin"
-                )
+            )
             user.user_permissions.add(permission)
             user.save()
         context["group"] = user_group
@@ -94,6 +95,8 @@ def user_register(request):
         return render(request, 'register.html', {'form': form})
 
 
+#TODO: When doing POST always redirect. never render
+@login_required(login_url='/login')
 def show_group_tasks(request):
     """ Show all pending tasks of the user group."""
     user = request.user
@@ -103,10 +106,10 @@ def show_group_tasks(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.cleaned_data[group] = user_group
+            form.cleaned_data["group"] = user_group
             form.save()
     else:
-        form = TaskForm(user)
+        form = TaskForm()
     context['all_tasks'] = group_tasks
     return render(request, 'show_tasks.html', {'form': form})
 

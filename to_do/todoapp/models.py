@@ -9,4 +9,4 @@ class Task(models.Model):
                                 )
     completed = models.BooleanField(default=False)
     group = models.ForeignKey(Group)
-    assignee = models.ForeignKey(User)
+    assignee = models.ForeignKey(User, related_name="assignee")
