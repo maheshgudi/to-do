@@ -8,12 +8,7 @@ from django.contrib import messages
 # local imports
 from todoapp.models import Task
 from todoapp.forms import (UserLoginForm, UserRegisterForm, TaskForm)
-
-# TODO: Put all utils function outside views
-def get_email_domain(email):
-    """A very simple and flawed function to get domain names from a user 
-       email"""
-    return email.split('@')[1]
+from todoapp.todoutils import (EmailManipulation)
 
 # TODO: Use default django login view
 # Put complexity in backend
@@ -45,7 +40,6 @@ def user_login(request):
             context["form"] = UserLoginForm()
     return render(request, 'login.html', context)
 
-#TODO: Do this during registration
 @login_required(login_url='/login')
 def home(request):
     """Logged in user home page. Can see tasks assigned to them. Can mark
@@ -54,23 +48,6 @@ def home(request):
     user = request.user
     context = {}
     context["user"] = user
-    user_email_domain = get_email_domain(user.email)
-    group_content_type = ContentType.objects.get_for_model(Group)
-    if user_email_domain:
-        user_group, created = Group.objects.get_or_create(
-            name=user_email_domain
-        )
-        user_group.user_set.add(user)
-        user_group.save()
-        if created:
-            permission = Permission.objects.create(
-                codename='is_admin',
-                content_type=group_content_type,
-                name="Is Group Admin"
-            )
-            user.user_permissions.add(permission)
-            user.save()
-        context["group"] = user_group
     return render(request, 'home.html', context)
 
 
@@ -80,12 +57,29 @@ def user_register(request):
     if user.is_authenticated():
         return redirect("home")
     context = {}
-    if request.method == "POST":
+    if request.POST:
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             u_name, user_email, pwd = form.save()
             new_user = authenticate(email=user_email, password=pwd)
             login(request, new_user)
+
+            user_email_domain = EmailManipulation.get_email_domain(user_email)
+            group_content_type = ContentType.objects.get_for_model(Group)
+            if user_email_domain:
+                user_group, created = Group.objects.get_or_create(
+                    name=user_email_domain
+                    )
+                user_group.user_set.add(user)
+                user_group.save()
+                if created:
+                    permission = Permission.objects.create(
+                        codename='is_admin',
+                        content_type=group_content_type,
+                        name="Is Group Admin"
+                        )
+                    user.user_permissions.add(permission)
+                    user.save()
             return redirect('home')
         else:
             form = UserRegisterForm()
